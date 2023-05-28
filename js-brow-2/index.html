@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TODO List</title>
+  <style>
+    .is-completed {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <h1>TODO List</h1>
+  
+  <form id="todo-form">
+    <input type="text" id="todo-input" placeholder="Ingresa tu nueva tarea">
+    <button type="submit">Add</button>
+  </form>
+  
+  <ul id="todo-list">
+  </ul>
+  
+  <button id="delete-button">Delete all done</button>
+  
+  <script>
+    // Variables globales
+    var todoList = document.getElementById("todo-list");
+    var todoInput = document.getElementById("todo-input");
+    var todoForm = document.getElementById("todo-form");
+    var deleteButton = document.getElementById("delete-button");
+    var todoId = 1;
+    
+    // Función para agregar una nueva tarea a la lista
+    function addTodo() {
+      var todoText = todoInput.value;
+      if (todoText !== "") {
+        var todoItem = document.createElement("li");
+        var todoCheckbox = document.createElement("input");
+        var todoLabel = document.createElement("label");
+        
+        todoCheckbox.type = "checkbox";
+        todoCheckbox.id = "todo-" + todoId;
+        todoLabel.htmlFor = "todo-" + todoId;
+        todoLabel.textContent = todoText;
+        
+        todoItem.appendChild(todoCheckbox);
+        todoItem.appendChild(todoLabel);
+        
+        todoList.appendChild(todoItem);
+        
+        todoInput.value = "";
+        todoId++;
+      }
+    }
+    
+    // Función para cambiar el estado de completado de una tarea
+    function toggleTodoComplete() {
+      var todoItem = this.parentNode;
+      todoItem.classList.toggle("is-completed");
+    }
+    
+    // Función para eliminar las tareas completadas
+    function deleteCompletedTodos() {
+      var completedTodos = todoList.getElementsByClassName("is-completed");
+      while (completedTodos.length > 0) {
+        completedTodos[0].remove();
+      }
+    }
+    
+    // Evento submit del formulario para agregar una nueva tarea
+    todoForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      addTodo();
+    });
+    
+    // Evento click de las casillas de verificación
+    todoList.addEventListener("click", function(event) {
+      if (event.target.type === "checkbox") {
+        toggleTodoComplete.call(event.target);
+      }
+    });
+    
+    // Evento click del botón "Delete all done"
+    deleteButton.addEventListener("click", function() {
+      deleteCompletedTodos();
+    });
+  </script>
+</body>
+</html>
