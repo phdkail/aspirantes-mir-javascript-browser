@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Local Storage</title>
+  </head>
+  <body>
+    <form>
+      <label for="name">Ingresa tu nombre</label>
+      <input type="text" id="name" name="name" placeholder="Ingresa tu nombre">
+      <label for="email">Ingresa tu correo electrónico</label>
+      <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico">
+      <button type="submit">Guardar</button>
+    </form>
+    <section></section>
+    <script>
+      // Obtener elementos del DOM
+      const form = document.querySelector('form');
+      const inputName = document.querySelector('#name');
+      const inputEmail = document.querySelector('#email');
+      const section = document.querySelector('section');
+
+      // Manejar el evento de enviar el formulario
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Obtener los valores de los inputs
+        const name = inputName.value;
+        const email = inputEmail.value;
+
+        // Guardar los datos en localStorage
+        const data = { name, email };
+        localStorage.setItem('userData', JSON.stringify(data));
+
+        // Mostrar los datos en la sección
+        showData();
+      });
+
+      // Función para mostrar el nombre y el correo guardados en localStorage
+      function showData() {
+        // Obtener los datos almacenados en localStorage
+        const storedData = localStorage.getItem('userData');
+
+        // Verificar si hay datos almacenados
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          const { name, email } = data;
+
+          // Mostrar los datos en la sección
+          section.innerHTML = `
+            <p>Nombre: ${name}</p>
+            <p>Correo electrónico: ${email}</p>
+            <button id="deleteButton">Borrar</button>
+          `;
+
+          // Manejar el evento de borrar los datos
+          const deleteButton = document.querySelector('#deleteButton');
+          deleteButton.addEventListener('click', deleteData);
+        } else {
+          // Mostrar mensaje de datos vacíos
+          section.textContent = 'No hay datos almacenados.';
+        }
+      }
+
+      // Función para borrar los datos almacenados en localStorage
+      function deleteData() {
+        localStorage.removeItem('userData');
+        section.innerHTML = '';
+      }
+
+      // Mostrar los datos almacenados al cargar la página
+      showData();
+    </script>
+  </body>
+</html>
