@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menú Multinivel</title>
+  <style>
+    .active {
+      font-weight: bold;
+    }
+
+    .submenu {
+      display: none;
+    }
+
+    .expanded .submenu {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="menu-container"></div>
+
+  <script>
+    const menu = [
+      {
+        name: 'Inicio',
+        items: []
+      },
+      {
+        name: 'Productos',
+        items: [
+          {
+            name: 'Electrónica',
+            items: [
+              { name: 'Televisores', items: [] },
+              { name: 'Computadoras', items: [] },
+              { name: 'Accesorios', items: [] }
+            ]
+          },
+          {
+            name: 'Ropa',
+            items: [
+              { name: 'Hombres', items: [] },
+              { name: 'Mujeres', items: [] },
+              { name: 'Niños', items: [] }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Contacto',
+        items: []
+      }
+    ];
+
+    function createMenu(menuData, parentElement) {
+      const ul = document.createElement('ul');
+
+      menuData.forEach(itemData => {
+        const li = document.createElement('li');
+        li.textContent = itemData.name;
+
+        if (itemData.items.length > 0) {
+          li.classList.add('has-submenu');
+          const submenu = createMenu(itemData.items, li);
+          li.appendChild(submenu);
+        }
+
+        ul.appendChild(li);
+      });
+
+      parentElement.appendChild(ul);
+
+      return ul;
+    }
+
+    const menuContainer = document.getElementById('menu-container');
+    createMenu(menu, menuContainer);
+
+    // Event listeners for expanding/collapsing submenus and highlighting active menu item
+    menuContainer.addEventListener('click', function(event) {
+      const target = event.target;
+      if (target.classList.contains('has-submenu')) {
+        target.classList.toggle('expanded');
+      } else {
+        const menuItems = menuContainer.querySelectorAll('li');
+        menuItems.forEach(item => {
+          item.classList.remove('active');
+        });
+        target.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
